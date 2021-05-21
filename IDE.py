@@ -10,45 +10,45 @@ compiler = Tk()
 compiler.title("PyPad")
 compiler.geometry("900x600")
 compiler.minsize(500,350)
-compiler.iconbitmap('python.ico')
+compiler.iconbitmap('Icons/python.ico')
 
 file_path = ''
 global selected
 selected =  False
 
-image=Image.open('new_file_icon.png')
+image=Image.open('Icons/new_file_icon.png')
 image = image.resize((20,20), Image.ANTIALIAS)
 new_file_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('bold_icon.png')
+image=Image.open('Icons/bold_icon.png')
 image = image.resize((15,15), Image.ANTIALIAS)
 bold_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('italic_icon.png')
+image=Image.open('Icons/italic_icon.png')
 image = image.resize((23,23), Image.ANTIALIAS)
 italic_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('undo_icon.png')
+image=Image.open('Icons/undo_icon.png')
 image = image.resize((18,18), Image.ANTIALIAS)
 undo_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('redo_icon.png')
+image=Image.open('Icons/redo_icon.png')
 image = image.resize((18,18), Image.ANTIALIAS)
 redo_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('run_icon.png')
+image=Image.open('Icons/run_icon.png')
 image = image.resize((23,23), Image.ANTIALIAS)
 run_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('save_icon.png')
+image=Image.open('Icons/save_icon.png')
 image = image.resize((20,20), Image.ANTIALIAS)
 save_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('cut_icon.png')
+image=Image.open('Icons/cut_icon.png')
 image = image.resize((20,20), Image.ANTIALIAS)
 cut_icon = ImageTk.PhotoImage(image)
 
-image=Image.open('paste_icon.png')
+image=Image.open('Icons/paste_icon.png')
 image = image.resize((23,23), Image.ANTIALIAS)
 paste_icon = ImageTk.PhotoImage(image)
 
