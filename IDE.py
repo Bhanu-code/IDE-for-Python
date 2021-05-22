@@ -52,15 +52,9 @@ image=Image.open('Icons/paste_icon.png')
 image = image.resize((23,23), Image.ANTIALIAS)
 paste_icon = ImageTk.PhotoImage(image)
 
-
-
-
-
-
 def new_file(e):
     editor.delete('1.0',END)
-    compiler.title('New File - PyPad')
-    status_bar.config(text="New File         ")
+
 
 def run(e):
     if file_path == '':
@@ -69,10 +63,10 @@ def run(e):
         text.pack()
         return
     command = f'python {file_path}'
-    process = subprocess.Popen(command, stdout= subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
+    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout = subprocess.PIPE, stderr=subprocess.PIPE, shell = True)
     output,error = process.communicate()
     code_output.insert('1.0', output)
-    code_output.insert('1.0', error)
+
 
 def save_as(e):
     if file_path == '':
@@ -113,11 +107,11 @@ def cut_text(e):
 
 def change_font(p):
     if p==1:
-        editor.config(font=("comicsans", 12))
+        editor.config(font=("comicsans ms", 12))
     elif p==2:
         editor.config(font=("Helvetica", 12))
     elif p==3:
-        editor.config(font=("Arial", 12))
+        editor.config(font=("courier new", 12))
     elif p==4:
         editor.config(font=("Calibri", 12))
     elif p==5:
@@ -144,8 +138,9 @@ def copy_text(e):
         compiler.clipboard_append(selected)
 
 def paste_text(e):
+    global selected
     if e:
-        selected = complier.clipboard_get()
+        selected = compiler.clipboard_get()
     else:
         if selected:
             pos = editor.index(INSERT)
@@ -201,6 +196,18 @@ def italic_it():
     else:
         editor.tag_add("italic", "sel.first", "sel.last")
 
+def about_us():
+    prompt = Toplevel()
+    message = '''PyPad 1.0 @Project-Kharagpur College.
+                 Note - This is not a real version controlled software and may have bugs.
+                 This software was build for Project work.
+                 This software is build on python modules and packages is capable of executing python script.
+                 Developers - Bhanu Chowhan, Jasvinder Singh, Harshit Gupta and Pamole Chakraborty
+                 Guide - Prof.Alok Haldar, HOD, Department of Computer Science and BCA, Kharagpur College
+                 Github link to the Source code-'''
+    text = Label(prompt,font = ("comisans ms", 14),text=message, fg="black")
+    text.pack()
+
 menu_bar = Menu(compiler)
 
 file_bar = Menu(menu_bar, tearoff=0)
@@ -213,25 +220,23 @@ file_bar.add_command(label="Exit", command=lambda:exit(False),accelerator="(Alt+
 menu_bar.add_cascade(label='File', menu =file_bar)
 
 edit_bar = Menu(menu_bar, tearoff=0)
+edit_bar.add_command(label="Undo", command=lambda:undo_text(False),accelerator="(Ctrl+z)")
+edit_bar.add_command(label="Redo", command=lambda:redo_text(False),accelerator="(Ctrl+y)")
+edit_bar.add_separator()
 edit_bar.add_command(label="Copy", command=lambda:copy_text(False),accelerator="(Ctrl+C)")
 edit_bar.add_command(label="Cut", command=lambda:cut_text(False),accelerator="(Ctrl+X)")
 edit_bar.add_command(label="Paste", command=lambda:paste_text(False),accelerator="(Ctrl+V)")
 menu_bar.add_cascade(label='Edit', menu =edit_bar)
 
-user_bar = Menu(menu_bar, tearoff=0)
-user_bar.add_command(label="Undo", command=lambda:undo_text(False),accelerator="(Ctrl+z)")
-user_bar.add_command(label="Redo", command=lambda:redo_text(False),accelerator="(Ctrl+y)")
-menu_bar.add_cascade(label='User', menu =user_bar)
-
 theme_bar = Menu(menu_bar, tearoff=0)
 theme_bar.add_command(label="Light Mode", command=light_mode)
 theme_bar.add_command(label="Night Mode", command=night_mode)
-menu_bar.add_cascade(label='Themes', menu =theme_bar)
+menu_bar.add_cascade(label='Mode', menu =theme_bar)
 
 font_bar = Menu(menu_bar, tearoff=0)
 font_bar.add_command(label="Comicsans", command=lambda:change_font(1))
 font_bar.add_command(label="Helvetica", command=lambda:change_font(2))
-font_bar.add_command(label="Arial", command=lambda:change_font(3))
+font_bar.add_command(label="Courier new", command=lambda:change_font(3))
 font_bar.add_command(label="Calibri", command=lambda:change_font(4))
 font_bar.add_command(label="Futura", command=lambda:change_font(5))
 font_bar.add_command(label="Garamond", command=lambda:change_font(6))
@@ -245,7 +250,7 @@ run_bar.add_command(label="Run", command=lambda:run(False), accelerator = "(Alt+
 menu_bar.add_cascade(label='Run', menu =run_bar)
 
 help_bar = Menu(menu_bar, tearoff=0)
-help_bar.add_command(label="About",command=run)
+help_bar.add_command(label="About",command=about_us)
 menu_bar.add_cascade(label='Help', menu = help_bar)
 
 #Creating Toolbar
@@ -275,7 +280,7 @@ editor.pack(pady=5,padx=5)
 
 #Configuring Scrollbar
 text_scroll.config(command = editor.yview)
-
+""
 #Creating Buttons
 new_file_button=Button(toolbar,image=new_file_icon,command=lambda:new_file(False), borderwidth=0)
 new_file_button.grid(row=0, sticky = W, column=0,padx=10)
@@ -304,11 +309,8 @@ redo_button.grid(row=0, column=7, padx=10)
 run_button=Button(toolbar,image=run_icon,command=lambda:run(False), borderwidth=0)
 run_button.grid(row=0, column=8, padx=10)
 
-
 code_output = Text(f2,width=160,height=15,bg = "white",font = ("Helvetica", 14),borderwidth=3, relief="sunken")
 code_output.pack(padx=5)
-
-
 
 #Bindking with Keyboard Shortcuts
 compiler.bind('<Control-Key-x>', cut_text)
@@ -327,6 +329,5 @@ status_bar.pack(fill = X,side = BOTTOM)
 
 
 compiler.config(menu=menu_bar, borderwidth=3, bg="light yellow", relief="sunken")
-
-
 compiler.mainloop()
+
